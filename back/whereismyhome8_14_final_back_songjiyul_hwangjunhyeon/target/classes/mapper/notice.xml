@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.home.mapper.NoticeMapper">
+	<resultMap type="Notice" id="N">
+		<result column="noticeNo" property="noticeNo"/>
+		<result column="title" property="title"/>
+		<result column="content" property="content"/>
+		<result column="wdate" property="wdate"/>
+		<result column="hit" property="hit"/>
+	</resultMap>
+	<resultMap type="Notice" id="fileNotice" extends="N">
+		<collection property="fileInfos" column="noticeNo" javaType="list" ofType="FileInfoDto" select="fileInfoDtoList"></collection>
+	</resultMap>
+	<resultMap type="FileInfoDto" id="file">
+		<result column="idx" property="idx"/>
+		<result column="saveFolder" property="saveFolder"/>
+		<result column="originalFile" property="originalFile"/>
+		<result column="saveFile" property="saveFile"/>
+	</resultMap>
+	<select id="fileInfoDtoList" resultMap="file">
+		select idx,saveFolder, originalFile, saveFile
+		from fileInfo
+		where noticeNo = #{noticeNo}
+	</select>
+
+	<select id="listNotice" resultType="Notice">
+		select noticeNo,title,content,wdate,hit from notice
+	</select>
+	
+	<select id="detailNotice" parameterType="string" resultMap="fileNotice">
+		select n.noticeNo,n.title,n.content,n.hit,n.wdate
+		from notice n
+		where n.noticeNo = #{noticeNo}
+	</select>
+	
+	
+	<insert id="registerNotice" parameterType="notice">
+		insert into notice (noticeNo,title,content,wdate,hit) 
+		values (#{noticeNo},#{title},#{content},now(),0)
+		
+		<selectKey resultType="int" keyProperty="noticeNo" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<insert id="registerFile" parameterType="notice">
+		insert into fileInfo (noticeNo,saveFolder,originalFile,saveFile)
+		values 
+		<foreach collection="fileInfos" item="fileinfo" separator=",">
+			(#{noticeNo},#{fileinfo.saveFolder},#{fileinfo.originalFile},#{fileinfo.saveFile})
+		</foreach>
+	</insert>
+	<update id="updateHit" parameterType="string">
+		update notice
+		set hit = hit + 1
+		where noticeNo = #{noticeNo}
+	</update>
+	<update id="editNotice" parameterType="Notice">
+		update notice 
+		set title = #{title},content = #{content}
+		where noticeNo = #{noticeNo}
+	</update>
+	<insert id="editFile" parameterType="notice">
+		insert into fileInfo (noticeNo,saveFolder,originalFile,saveFile)
+		values 
+		<foreach collection="fileInfos" item="fileinfo" separator=",">
+			(#{noticeNo},#{fileinfo.saveFolder},#{fileinfo.originalFile},#{fileinfo.saveFile})
+		</foreach>
+	</insert>
+	
+	<delete id="deleteFile" parameterType="NoticeModify">
+		delete from fileInfo
+		where originalFile in
+		<foreach collection="deleteInfos" item="deleteInfo" open="(" close=")" separator=",">
+			#{deleteInfo}
+		</foreach>
+	</delete>
+
+</mapper>

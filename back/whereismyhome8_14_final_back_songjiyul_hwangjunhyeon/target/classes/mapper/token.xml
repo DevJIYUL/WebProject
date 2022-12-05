@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.home.mapper.TokenMapper">
+	<select id="findByUsername" parameterType="string" resultType="Token">
+		select username, accessToken, refreshToken
+		from token
+		where username=#{username}
+	</select>
+
+	<select id="findByRefreshToken" parameterType="string"
+		resultType="Token">
+		select username, accessToken, refreshToken
+		from token
+		where refreshToken = #{token}
+	</select>
+	
+	<insert id="insertToken" parameterType="Token">
+		insert into token(username, accessToken, refreshToken)
+		values(#{username}, #{accessToken}, #{refreshToken})
+	</insert>
+
+
+	<update id="updateTokenByUsername">
+		update token
+		set accessToken=#{accessToken}, refreshToken=#{refreshToken}
+		where username=#{username}
+	</update>
+
+	<update id="deleteByUsername" parameterType="string">
+		update token
+		set accessToken=NULL, refreshToken=NULL 
+		where username=#{username}
+	</update>
+
+	<update id="updateAccessTokenByUsername" parameterType="map">
+		update token
+		set accessToken=#{token}
+		where username=#{username}
+	</update>
+
+</mapper>

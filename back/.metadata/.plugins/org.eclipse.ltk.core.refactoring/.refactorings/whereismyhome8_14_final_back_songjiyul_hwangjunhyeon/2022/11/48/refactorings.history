@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;Notice.java&apos; to &apos;com.home.vo.notice.Notice.java&apos;&#x0D;&#x0A;- Original project: &apos;whereismyhome8_14_final_back_songjiyul_hwangjunhyeon&apos;&#x0D;&#x0A;- Destination element: &apos;com.home.vo.notice.Notice.java&apos;&#x0D;&#x0A;- Original element: &apos;com.home.vo.notice.Notice.java&apos;" description="Copy compilation unit" destination="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.home.vo.notice{Notice.java" element1="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.home.vo.notice{Notice.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1668963740462" units="1" version="1.0"/>
+</session>

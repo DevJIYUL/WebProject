@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.home.mapper.AptMapper">
+
+	<resultMap type="SearchDto" id="searchMap">
+		<result column="no" property="no" />
+		<result column="aptCode" property="aptCode" />
+		<result column="apartmentName" property="apartmentName" />
+		<result column="buildYear" property="buildYear"/>
+		<result column="roadName" property="roadName"/>		
+		<result column="jibun" property="jibun"/>		
+		<result column="lng" property="lng"/>		
+		<result column="lat" property="lat"/>		
+		<result column="area" property="area" />
+		<result column="floor" property="floor" />
+		<result column="dealAmount" property="dealAmount" />
+		<result column="dong" property="dongName" />
+		<result column="dongCode" property="dongCode" />
+		<result column="dealYear" property="dealYear" />
+		<result column="dealMonth" property="dealMonth" />
+		<result column="dealDay" property="dealDay" />
+	</resultMap>
+
+
+	<select id="selectAllSido" parameterType="string"
+		resultType="DongDto">
+		select distinct(sidoName) from dongcode
+		where dongName IS NOT NULL
+	</select>
+
+	<select id="selectAllGugun" parameterType="DongDto"
+		resultType="DongDto">
+		select distinct(gugunName) from dongcode
+		where
+		sidoName=#{sidoName} and dongName IS NOT NULL
+		order by gugunName
+	</select>
+
+	<select id="selectAllDong" parameterType="DongDto"
+		resultType="DongDto">
+		select distinct(dongName), dongCode from dongcode
+		where
+		sidoName=#{sidoName} and gugunName=#{gugunName}
+		and dongName IS NOT
+		NULL
+		order by dongName
+	</select>
+
+
+
+	<select id="selectOneByAptCode" parameterType="KeywordDto"
+		resultMap="searchMap">
+		select i.aptCode, i.buildYear, i.roadName, i.dong, i.apartmentName, i.jibun, i.lng, i.lat,
+			d.dealYear, d.dealMonth, d.dealDay, d.area, d.floor, d.dealAmount
+		from houseinfo i join
+		housedeal d on i.aptcode = d.aptcode
+		where i.aptCode=#{aptCode} and d.no=#{no}
+	</select>
+	
+	<sql id="conditionDate">
+		<if test="year != '' and month != ''">
+			and d.dealYear = #{year} and d.dealMonth = #{month}
+		</if>
+		<if test="year != '' and month == ''">
+			and d.dealYear = #{year}
+		</if>
+	</sql>
+
+	<select id="searchByDong" parameterType="KeywordDto"
+		resultMap="searchMap">
+		select d.no, h.aptCode, h.apartmentName, d.area, d.floor, d.dealAmount,
+		h.dong, h.dongCode, d.dealYear, d.dealMonth
+		from houseinfo h join
+		housedeal d on h.aptcode = d.aptcode
+		where h.dongCode=#{dongCode}
+		<include refid="conditionDate" />
+	</select>
+
+	<select id="searchByAptName" parameterType="string"
+		resultMap="searchMap">
+		select d.no, h.aptCode, h.apartmentName, d.area, d.floor,
+		d.dealAmount, h.dong, h.dongCode, d.dealYear, d.dealMonth
+		from
+		houseinfo h join housedeal d on h.aptcode = d.aptcode
+		where
+		h.apartmentName like concat('%', #{aptName}, '%')
+	</select>
+
+	<select id="selectLngLat" parameterType="string"
+		resultType="AptDto">
+		select aptCode, lng, lat
+		from houseinfo
+		where aptCode=#{aptCode};
+	</select>
+</mapper>

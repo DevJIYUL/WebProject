@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.home.mapper.QuestMapper">
+	<select id="getQnaAll" resultType="Quest">
+		select id,title,content,privateFlag,answeredFlag,regDate,answer,username from quest 
+		order by id desc
+	</select>
+	<select id="QuestfindById" parameterType="string" resultType="Quest">
+		select id,title,content,privateFlag,answeredFlag,regDate,answer,username
+		from quest
+		where id = #{id}
+		order by id desc
+	</select>
+	<insert id="registerQuest" parameterType="Quest">
+		insert into quest (title,content,privateFlag,answeredFlag,regDate,username)
+		values (#{title},#{content},#{privateFlag},false,date_format(sysdate(), "%Y-%m-%d"),#{username})
+	</insert>
+	<delete id="deleteQuest" parameterType="string">
+		delete from quest where id = #{id}
+	</delete>
+	
+	<select id="searchByUser" parameterType="string" resultType="Quest">
+		select id,title,content,privateFlag,answeredFlag,regDate,answer, username
+		from quest 
+		where username = #{username}
+		order by id desc
+	</select>
+	
+	<update id="answerQuest" parameterType="Quest">
+		update quest
+		set answer = #{answer},answeredFlag = true
+		where id = #{id}
+	</update>
+	
+	<update id="modifyQuest" parameterType="Quest">
+		update quest
+		set title = #{title},content= #{content}
+		where id = #{id}
+	</update>
+</mapper>
