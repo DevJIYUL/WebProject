@@ -1,0 +1,11 @@
+package com.home.vo.user;
+
+import io.swagger.annotations.ApiModel;
+import lombok.Data;
+
+@Data
+@ApiModel(value = "Favorite", description = "관심지역")
+public class FavoriteKeyword {
+	private String id;
+	private String dongCode;
+}

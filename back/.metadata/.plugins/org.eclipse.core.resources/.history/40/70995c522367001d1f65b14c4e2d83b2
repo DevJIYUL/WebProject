@@ -1,0 +1,68 @@
+package com.home.service.user;
+
+import java.util.List; 
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.home.mapper.UserMapper;
+import com.home.vo.user.LoginDto;
+import com.home.vo.user.SignupDto;
+import com.home.vo.user.User;
+@Service
+public class UserServiceImpl implements UserService{
+
+	private UserMapper userMapper;
+	@Autowired
+	private UserServiceImpl(UserMapper userMapper) {
+		this.userMapper = userMapper;
+	}
+	@Override
+	public int idCheck(String id) throws Exception {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int joinUser(SignupDto signupdto) throws Exception {
+		User userinfo = new User();
+		userinfo.setId(signupdto.getId());
+		userinfo.setPassword(signupdto.getPassword());
+		userinfo.setEmail(signupdto.getEmail());
+		userinfo.setDomain(signupdto.getDomain());
+		userinfo.setJoinDate(signupdto.getJoinDate());
+		userinfo.setRole(signupdto.getRole());
+		userinfo.setResidence(signupdto.getResidence());
+		return userMapper.joinUser(signupdto);
+		
+	}
+
+	@Override
+	public int loginUser(LoginDto logindto) throws Exception {
+		// TODO Auto-generated method stub
+		return userMapper.loginUser(logindto);
+	}
+
+	@Override
+	public List<User> listUser() throws Exception {
+		return userMapper.listUser();
+		
+	}
+
+	@Override
+	public User getUser(String id) throws Exception {
+		// TODO Auto-generated method stub
+		return userMapper.getUser(id);
+	}
+
+	@Override
+	public int updateUser(User user) throws Exception {
+		return userMapper.updateUser(user);
+	}
+	@Override
+	public int findPassword(String id) throws Exception {
+		return userMapper.findPassword(id);
+		
+	}
+}
