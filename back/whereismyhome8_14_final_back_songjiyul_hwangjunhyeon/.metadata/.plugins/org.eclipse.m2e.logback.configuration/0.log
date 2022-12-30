@@ -1,0 +1,2 @@
+2022-12-30 21:49:43,602 [Worker-3: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2022-12-30 21:50:10,557 [Worker-3: Auto share git projects] WARN  org.eclipse.jgit.util.FS_Win32 - null

@@ -17,4 +17,10 @@ public class FavoriteLoc {
 	private String gugunName;
 	
 	private String dongName;
+
+	public FavoriteLoc(String username, String dongCode) {
+		super();
+		this.username = username;
+		this.dongCode = dongCode;
+	}
 }
